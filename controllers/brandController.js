@@ -1,6 +1,15 @@
+const { Brand } = require("../models/models");
+
 class BrandController {
-  async create(req, res) {}
-  async getAll(req, res) {}
+  async create(req, res) {
+    const { name } = req.body;
+    const brands = await Brand.create({ name });
+    return res.json(brands);
+  }
+  async getAll(req, res) {
+    const brands = await Brand.findAll();
+    return res.json(brands);
+  }
 }
 
 module.exports = new BrandController();
