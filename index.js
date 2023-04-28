@@ -4,17 +4,14 @@ const sequelize = require("./db");
 const models = require("./models/models.js");
 const cors = require("cors");
 const router = require("./routes/index");
+const errorHanlder = require("./middleware/errorHandlingMiddleware");
 const PORT = process.env.PORT || 5001;
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api", router);
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Server is working correctly" });
-});
-app.get("/*", (req, res) => {
-  res.json({ message: "404 not found" });
-});
+app.use(errorHanlder);
+
 const start = async () => {
   try {
     await sequelize.authenticate();
