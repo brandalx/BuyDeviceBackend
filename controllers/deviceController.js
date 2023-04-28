@@ -1,10 +1,28 @@
 const uuid = require("uuid");
+const path = require("path");
+const ApiError = require("../errors/apiErrors");
+const { Device } = require("../models/models");
 class DeviceController {
   async create(req, res) {
-    const { name, price, brandId, typeId, info } = req.body;
-    const { img } = req.files;
-    let fileName = uuid.v4() + ".jpg";
+    try {
+      const { name, price, brandId, typeId, info } = req.body;
+      const { img } = req.files;
+      let fileName = uuid.v4() + ".jpg";
+      img.mv(path.resolve(__dirname, "..", "static", fileName));
+      const device = await Device.create({
+        name,
+        price,
+        brandId,
+        typeId,
+        img: fileName,
+      });
+      return res.json(device);
+    } catch (err) {
+      console.log(err);
+      next(ApiError.badRequest(err.message));
+    }
   }
+
   async getAll(req, res) {}
   async getOne(req, res) {
     const query = req.query;
