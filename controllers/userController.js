@@ -6,7 +6,7 @@ class UserController {
   async check(req, res, next) {
     const { id } = req.query;
     if (!id) {
-      next(ApiError.badRequest("No id were provided"));
+      return next(ApiError.badRequest("No id were provided"));
     }
 
     res.json(id);
